@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub User Information</title>
+    <style>
+        body {
+            background-image: url(https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=1788&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .bdy {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10%;
+        }
+
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #user-info {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .bdy {
+                padding: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bdy">
+        <h1>GitHub User Information</h1>
+        <label for="username">Enter GitHub Username:</label>
+        <input type="text" id="username" placeholder="Enter GitHub username">
+        <br>
+        <button onclick="getUserInfo()">Get User Info</button>
+
+        <div id="user-info">
+        </div>
+    </div>
+
+    <script>
+        async function getGitHubUser(username) {
+            const apiUrl = `https://api.github.com/users/${username}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                document.getElementById('user-info').innerHTML = `
+                    <p><strong>Name:</strong> ${data.name || 'N/A'}</p>
+                    <p><strong>Username:</strong> ${data.login}</p>
+                    <p><strong>Bio:</strong> ${data.bio || 'N/A'}</p>
+                    <p><strong>Public Repositories:</strong> ${data.public_repos}</p>
+                `;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function getUserInfo() {
+            const usernameInput = document.getElementById('username');
+            const username = usernameInput.value;
+
+            getGitHubUser(username);
+        }
+    </script>
+</body>
+</html>
